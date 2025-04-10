@@ -1,0 +1,124 @@
+---
+title: "690C HW2 Network Analysis"
+author: "Amber Bellou"
+output: html_document
+---
+
+```{r load-packages, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(igraph)
+library(tidyverse)
+library(ggraph)
+```
+```{r load-graphs}
+# Load necessary library
+library(igraph)
+
+# Load the graphml files
+peru_graph <- read_graph("peru.graphml", format = "graphml")
+seattle_graph <- read_graph("seattle.graphml", format = "graphml")
+fifa_graph <- read_graph("fifa_country_proj.graphml", format = "graphml")
+```
+```{r peru-community}
+# Louvain
+peru_louvain <- cluster_louvain(peru_graph)
+plot(peru_louvain, peru_graph, main = "Peru Graph: Louvain")
+
+# Leiden
+peru_leiden <- cluster_leiden(peru_graph)
+plot(peru_leiden, peru_graph, main = "Peru Graph: Leiden")
+```
+
+```{r}
+# Try Louvain
+try({
+  seattle_louvain <- cluster_louvain(seattle_graph)
+  plot(seattle_louvain, seattle_graph, main = "Seattle Graph: Louvain")
+})
+
+# Try Leiden
+try({
+  seattle_leiden <- cluster_leiden(seattle_graph)
+  plot(seattle_leiden, seattle_graph, main = "Seattle Graph: Leiden")
+})
+
+```
+
+```{r}
+# Walktrap
+seattle_walktrap <- cluster_walktrap(seattle_graph)
+plot(seattle_walktrap, seattle_graph, main = "Seattle Graph: Walktrap")
+
+# Infomap
+seattle_infomap <- cluster_infomap(seattle_graph)
+plot(seattle_infomap, seattle_graph, main = "Seattle Graph: Infomap")
+
+```
+```{r}
+# Louvain
+fifa_louvain <- cluster_louvain(fifa_graph)
+plot(fifa_louvain, fifa_graph, main = "FIFA Graph: Louvain")
+
+# Leiden
+fifa_leiden <- cluster_leiden(fifa_graph)
+plot(fifa_leiden, fifa_graph, main = "FIFA Graph: Leiden")
+
+```
+```{r}
+# Louvain
+fifa_louvain <- cluster_louvain(fifa_graph)
+plot(fifa_louvain, fifa_graph, main = "FIFA Graph: Louvain")
+
+# Leiden
+fifa_leiden <- cluster_leiden(fifa_graph)
+plot(fifa_leiden, fifa_graph, main = "FIFA Graph: Leiden")
+
+```
+```{r}
+# Save plots to files (optional)
+png("fifa_louvain.png", width = 800, height = 600)
+plot(fifa_louvain, fifa_graph, main = "FIFA Graph: Louvain")
+dev.off()
+
+png("fifa_leiden.png", width = 800, height = 600)
+plot(fifa_leiden, fifa_graph, main = "FIFA Graph: Leiden")
+dev.off()
+
+```
+```{r}
+length(peru_louvain)
+length(peru_leiden)
+length(seattle_infomap)
+length(seattle_walktrap)
+length(fifa_louvain)
+length(fifa_leiden)
+
+```
+# Conclusion
+For this assignment, I analyzed three different network graphs — Peru, Seattle, and FIFA — to explore how various community detection algorithms perform in different contexts. The algorithms I used were Louvain, Leiden, Walktrap, and Infomap, each with its own strengths. The structure and direction of the graphs influenced how many communities were detected and how they were formed.
+
+ Peru Graph (Undirected)
+
+Louvain: 10 communities
+Leiden: 37 communities
+Leiden picked up way more communities than Louvain here, suggesting that it’s better at picking out smaller, more specific clusters. Louvain took a broader approach, forming fewer and larger groups. So, if the goal is to understand more detailed relationships, Leiden might be the better choice. For general patterns, Louvain still works well.
+
+Seattle Graph (Directed)
+
+Walktrap: 4 communities
+Infomap: 1 community
+Walktrap found four communities in the Seattle graph, showing some modular structure. Infomap, on the other hand, only found one, which might mean the graph is too dense or centralized for Infomap to split it up meaningfully. This shows how Walktrap might be better suited for identifying smaller structures in directed graphs like this one.
+
+FIFA Graph (Undirected)
+
+Louvain: 4 communities
+Leiden: 9 communities
+Both methods found structure in the FIFA player network, but again, Leiden identified more detailed communities. This fits with how it’s designed to detect finer differences — like maybe distinctions between clubs or regional groupings — while Louvain grouped players more broadly.
+
+ Final Takeaways
+Leiden consistently produced more detailed community structures, making it a good choice when you need precision.
+Louvain favored larger, simpler groupings, which can be helpful for a higher-level overview.
+Walktrap worked well for the directed Seattle graph and showed clear modularity.
+Infomap seemed too coarse in this case, especially with the Seattle data.
+In the end, the best algorithm depends on what you’re trying to learn from your network — whether it’s broad structure or smaller, tighter clusters.
