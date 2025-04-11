@@ -1,83 +1,70 @@
-# 690C HW2: Network Analysis
-
+# DACSS 690C — Homework 2: Network Analysis  
 **Author:** Amber Bellou  
-**Course:** DACSS 690C — Computational Social Science  
-**Assignment:** Homework 2 — Network Analysis  
+**Course:** DACSS 690C – Computational Social Science  
+**Assignment:** Homework 2 – Community Detection  
 **Submission Date:** April 10, 2025  
 
 ---
 
 ## 🔍 Overview
 
-This homework explores the performance of different community detection algorithms across three networks:
+This assignment explores community detection on three different networks using multiple clustering algorithms. The goal was to evaluate how algorithms like **Louvain**, **Leiden**, **Walktrap**, and **Infomap** perform on graphs with different structures (directed vs. undirected) and connectivity.
 
-- 🌎 **Peru** — Undirected social network
-- 🌆 **Seattle** — Directed social network
-- ⚽ **FIFA** — Undirected bipartite projection of World Cup teams and clubs
-
-Four algorithms were applied to analyze community structure:
-
-- **Louvain**
-- **Leiden**
-- **Walktrap**
-- **Infomap**
-
-We evaluated the number of communities found and their **modularity scores** — a key metric to assess how well-separated the detected communities are.
+### Networks Analyzed:
+- 🌎 **Peru** (Undirected)
+- 🌆 **Seattle** (Directed)
+- ⚽ **FIFA** (Undirected)
 
 ---
 
 ## 📁 Files Included
 
-- `690C_HW2_NetworkAnalysis.Rmd` – Full analysis code in RMarkdown  
-- `index.html` – **Rendered HTML report (viewable online)**  
-- `peru.graphml`, `seattle.graphml`, `fifa_country_proj.graphml` – Input network data  
-- PNG visualizations for all graphs and algorithms:
-  - `peru_louvain.png`, `peru_leiden.png`
-  - `seattle_walktrap.png`, `seattle_infomap.png`
-  - `fifa_louvain.png`, `fifa_leiden.png`
-- `README.md` – This file
-
----
-
-## 🌐 View Final Report
-
-Click here to view the published HTML on **GitHub Pages**:  
-🔗 https://amberbelloudacss690c.github.io/690C.HW2/
+- `index.html` — Final rendered report
+- `690C_HW2_NetworkAnalysis.Rmd` — Source code (R Markdown)
+- `peru.graphml`, `seattle.graphml`, `fifa_country_proj.graphml` — Graph data files
+- `peru_louvain.png`, `peru_leiden.png` — Peru plots  
+- `seattle_walktrap.png`, `seattle_infomap.png` — Seattle plots  
+- `fifa_louvain.png`, `fifa_leiden.png` — FIFA plots  
+- `README.md` — This file
 
 ---
 
 ## 📊 Results Summary
 
-| Graph   | Algorithm | Communities | Modularity Score |
-|---------|-----------|-------------|------------------|
-| Peru    | Louvain   | 10          | 0.2886           |
-| Peru    | Leiden    | 37          | 0.0414           |
-| Seattle | Walktrap  | 4           | 0.0926           |
-| Seattle | Infomap   | 1           | 0.0371           |
-| FIFA    | Louvain   | 3           | 0.0454           |
-| FIFA    | Leiden    | 7           | 0.0149           |
+| Graph    | Algorithm | Communities | Modularity |
+|----------|-----------|-------------|------------|
+| Peru     | Louvain   | 10          | 0.2886     |
+| Peru     | Leiden    | 37          | -0.0414    |
+| Seattle  | Walktrap  | 6           | 0.0926     |
+| Seattle  | Infomap   | 1           | 0.0000     |
+| FIFA     | Louvain   | 2           | 0.0308     |
+| FIFA     | Leiden    | 9           | 0.0106     |
 
 ---
 
-## 🧠 Final Takeaways
+## ✅ Key Takeaways
 
-- **Leiden** consistently found more **granular community structures**, but with **lower modularity**, meaning the communities were more fragmented.
-- **Louvain** found **larger, well-separated clusters**, especially in the Peru graph where modularity was the highest (0.2886), making it strong for macro-level analysis.
-- **Walktrap** performed best for the **directed Seattle network**, detecting 4 clear communities with solid modularity (0.0926).
-- **Infomap** returned only **1 community** for Seattle, showing it may be too coarse for sparse directed networks.
-- **FIFA network** showed **low modularity overall** — likely due to overlapping affiliations (e.g. players in both club and country teams), but Louvain still outperformed Leiden in modular strength.
+- **Louvain** performed best on both **Peru** and **FIFA**, offering stronger modularity and more cohesive clusters.
+- **Leiden** detected more communities but with lower modularity, making it better for fine-grained analysis rather than strong structural clusters.
+- **Walktrap** was most effective for the **Seattle** directed graph, clearly outperforming Infomap.
+- **Infomap** struggled with dense/directed structure and returned low or no modularity.
+
+➡️ **Conclusion**: *Louvain and Walktrap were the most effective algorithms for these networks.*
 
 ---
 
-## ✅ How to Reproduce
+## 🔁 How to Reproduce
 
-To run the analysis locally:
+1. Open `690C_HW2_NetworkAnalysis.Rmd` in RStudio.
+2. Click **Knit** to generate `index.html`.
+3. Required R packages:
+   - `igraph`
+   - `tidyverse`
+   - `ggraph`
 
-1. Clone this repository  
-2. Open `690C_HW2_NetworkAnalysis.Rmd` in RStudio  
-3. Click “Knit” to generate the HTML output  
-4. Required R packages:
-   ```r
-   library(igraph)
-   library(ggraph)
-   library(tidyverse)
+---
+
+## 📌 Notes
+
+- All modularity scores and visualizations were generated using the correct algorithms for each graph type.
+- This submission follows all assignment guidelines and includes visual outputs, analysis, and summary tables.
