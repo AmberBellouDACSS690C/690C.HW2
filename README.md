@@ -8,6 +8,8 @@
 
 ## 🔍 Overview
 
+https://amberbelloudacss690c.github.io/690C.HW2/
+
 This assignment explores community detection on three different networks using multiple clustering algorithms. The goal was to evaluate how algorithms like **Louvain**, **Leiden**, **Walktrap**, and **Infomap** perform on graphs with different structures (directed vs. undirected) and connectivity.
 
 ### Networks Analyzed:
