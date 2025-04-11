@@ -1,0 +1,183 @@
+---
+title: "690C HW2 Network Analysis"
+author: "Amber Bellou"
+output: html_document
+---
+
+```{r load-packages, message=FALSE, warning=FALSE}
+
+# Load libraries
+library(igraph)
+library(tidyverse)
+library(ggraph)
+```
+```{r load-graphs}
+# Load necessary library
+library(igraph)
+
+# Load the graphml files
+peru_graph <- read_graph("peru.graphml", format = "graphml")
+seattle_graph <- read_graph("seattle.graphml", format = "graphml")
+fifa_graph <- read_graph("fifa_country_proj.graphml", format = "graphml")
+```
+```{r peru-community}
+# Louvain
+peru_louvain <- cluster_louvain(peru_graph)
+plot(peru_louvain, peru_graph, main = "Peru Graph: Louvain")
+
+# Leiden
+peru_leiden <- cluster_leiden(peru_graph)
+plot(peru_leiden, peru_graph, main = "Peru Graph: Leiden")
+```
+
+```{r}
+# Try Louvain
+try({
+  seattle_louvain <- cluster_louvain(seattle_graph)
+  plot(seattle_louvain, seattle_graph, main = "Seattle Graph: Louvain")
+})
+
+# Try Leiden
+try({
+  seattle_leiden <- cluster_leiden(seattle_graph)
+  plot(seattle_leiden, seattle_graph, main = "Seattle Graph: Leiden")
+})
+
+```
+
+```{r}
+# Walktrap
+seattle_walktrap <- cluster_walktrap(seattle_graph)
+plot(seattle_walktrap, seattle_graph, main = "Seattle Graph: Walktrap")
+
+# Infomap
+seattle_infomap <- cluster_infomap(seattle_graph)
+plot(seattle_infomap, seattle_graph, main = "Seattle Graph: Infomap")
+
+```
+```{r}
+# Louvain
+fifa_louvain <- cluster_louvain(fifa_graph)
+plot(fifa_louvain, fifa_graph, main = "FIFA Graph: Louvain")
+
+# Leiden
+fifa_leiden <- cluster_leiden(fifa_graph)
+plot(fifa_leiden, fifa_graph, main = "FIFA Graph: Leiden")
+
+```
+```{r}
+# Louvain
+fifa_louvain <- cluster_louvain(fifa_graph)
+plot(fifa_louvain, fifa_graph, main = "FIFA Graph: Louvain")
+
+# Leiden
+fifa_leiden <- cluster_leiden(fifa_graph)
+plot(fifa_leiden, fifa_graph, main = "FIFA Graph: Leiden")
+
+```
+```{r}
+# Save plots to files (optional)
+png("fifa_louvain.png", width = 800, height = 600)
+plot(fifa_louvain, fifa_graph, main = "FIFA Graph: Louvain")
+dev.off()
+
+png("fifa_leiden.png", width = 800, height = 600)
+plot(fifa_leiden, fifa_graph, main = "FIFA Graph: Leiden")
+dev.off()
+
+```
+```{r}
+length(peru_louvain)
+length(peru_leiden)
+length(seattle_infomap)
+length(seattle_walktrap)
+length(fifa_louvain)
+length(fifa_leiden)
+
+```
+```{r}
+# Save Peru Louvain Plot
+png("peru_louvain.png", width = 800, height = 600)
+plot(peru_louvain, peru_graph, main = "Peru Graph: Louvain")
+dev.off()
+
+# Save Peru Leiden Plot
+png("peru_leiden.png", width = 800, height = 600)
+plot(peru_leiden, peru_graph, main = "Peru Graph: Leiden")
+dev.off()
+
+# Save Seattle Walktrap Plot
+png("seattle_walktrap.png", width = 800, height = 600)
+plot(seattle_walktrap, seattle_graph, main = "Seattle Graph: Walktrap")
+dev.off()
+
+# Save Seattle Infomap Plot
+png("seattle_infomap.png", width = 800, height = 600)
+plot(seattle_infomap, seattle_graph, main = "Seattle Graph: Infomap")
+dev.off()
+
+```
+
+```{r modularity_scores, message=FALSE, warning=FALSE}
+# Load igraph (in case it was cleared or restarted)
+library(igraph)
+
+# Calculate Modularity Scores
+mod_peru_louvain <- modularity(peru_graph, membership(peru_louvain))
+mod_peru_leiden <- modularity(peru_graph, membership(peru_leiden))
+
+mod_seattle_walktrap <- modularity(seattle_graph, membership(seattle_walktrap))
+mod_seattle_infomap <- modularity(seattle_graph, membership(seattle_infomap))
+
+mod_fifa_louvain <- modularity(fifa_graph, membership(fifa_louvain))
+mod_fifa_leiden <- modularity(fifa_graph, membership(fifa_leiden))
+
+# Print scores
+mod_peru_louvain
+mod_peru_leiden
+mod_seattle_walktrap
+mod_seattle_infomap
+mod_fifa_louvain
+mod_fifa_leiden
+```
+## Conclusion
+
+This assignment explored community detection in three network graphs — Peru, Seattle, and FIFA — using Louvain, Leiden, Walktrap, and Infomap algorithms. Each graph varied in structure and connectivity, which affected the performance and suitability of the algorithms. Below are the results and my recommended choices based on modularity scores and clustering granularity.
+
+### 🌎 Peru Graph (Undirected)
+
+- **Louvain** detected **10 communities**, with a **modularity of 0.2886**.
+- **Leiden** detected **37 communities**, with a **modularity of -0.0414**.
+
+🟩 **Decision:** **Louvain is preferred** here. It produced fewer but more cohesive communities and had a significantly higher modularity score, suggesting it captured stronger and more meaningful groupings.
+
+---
+
+### 🌆 Seattle Graph (Directed)
+
+- **Walktrap** detected **6 communities**, with a **modularity of 0.0926**.
+- **Infomap** detected **1 community**, with a **modularity of 0**.
+
+🟩 **Decision:** **Walktrap is the better choice.** It was able to identify multiple communities and showed non-zero modularity, while Infomap failed to find meaningful structure in the dense, directed graph.
+
+---
+
+### ⚽ FIFA Graph (Undirected)
+
+- **Louvain** detected **2 communities**, with a **modularity of 0.0308**.
+- **Leiden** detected **9 communities**, with a **modularity of 0.0106**.
+
+🟩 **Decision:** **Louvain is preferred.** Although Leiden found more clusters, Louvain had higher modularity, indicating stronger internal consistency in the groups it identified.
+
+---
+
+### 🧠 Final Takeaways
+
+- **Louvain** performed best for both the Peru and FIFA graphs, offering stronger modularity and clearer structures.
+- **Leiden** offered more granularity but at the cost of lower modularity, which can limit interpretability.
+- **Walktrap** was most effective for the directed Seattle graph, outperforming Infomap.
+- **Infomap** struggled to detect structure in this dataset and is not recommended here.
+
+➡️ **Overall, Louvain and Walktrap were the most effective algorithms for these networks.**
+
+``'
