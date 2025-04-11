@@ -95,6 +95,29 @@ length(fifa_louvain)
 length(fifa_leiden)
 
 ```
+```{r}
+# Save Peru Louvain Plot
+png("peru_louvain.png", width = 800, height = 600)
+plot(peru_louvain, peru_graph, main = "Peru Graph: Louvain")
+dev.off()
+
+# Save Peru Leiden Plot
+png("peru_leiden.png", width = 800, height = 600)
+plot(peru_leiden, peru_graph, main = "Peru Graph: Leiden")
+dev.off()
+
+# Save Seattle Walktrap Plot
+png("seattle_walktrap.png", width = 800, height = 600)
+plot(seattle_walktrap, seattle_graph, main = "Seattle Graph: Walktrap")
+dev.off()
+
+# Save Seattle Infomap Plot
+png("seattle_infomap.png", width = 800, height = 600)
+plot(seattle_infomap, seattle_graph, main = "Seattle Graph: Infomap")
+dev.off()
+
+```
+
 # Conclusion
 For this assignment, I analyzed three different network graphs — Peru, Seattle, and FIFA — to explore how various community detection algorithms perform in different contexts. The algorithms I used were Louvain, Leiden, Walktrap, and Infomap, each with its own strengths. The structure and direction of the graphs influenced how many communities were detected and how they were formed.
 
